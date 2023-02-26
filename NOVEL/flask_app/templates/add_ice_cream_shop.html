@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Add New Ice Cream Shop</title>
+</head>
+
+<body>
+	<div>
+		<a class="mx-3" href='/dashboard'>dashboard</a>|
+		<a class="mx-3" href="/logout">logout</a>
+	</div>
+	<h1>Add New Ice Cream Shop</h1>
+	<form action="/ice_cream_shops/create" method="POST">
+		<label for="name">Name:</label>
+		<input type="text" id="name" name="name" required><br><br>
+
+		<label for="address">Address:</label>
+		<input type="text" id="address" name="address" required><br><br>
+
+		<label for="phone_number">Phone Number:</label>
+		<input type="text" id="phone_number" name="phone_number" required><br><br>
+
+		<input type="submit" value="Submit">
+	</form>
+</body>
+
+</html>

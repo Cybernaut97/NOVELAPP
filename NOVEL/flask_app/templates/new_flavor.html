@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Flavor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <button class='btn-danger mb-3'>{{message}}</button>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+    <div class="d-flex justify-content-between">
+        <h1>Add a Flavor!</h1>
+        <div>
+            <a class="mx-3" href='/dashboard'>dashboard</a>|
+            <a class="mx-3" href="/logout">logout</a>
+        </div>
+    </div>
+    <form class='w-50 p-3 form-control d-flex flex-column align-items-start bg-dark text-light' action="/create" method="POST">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" value="{{ flavor.name }}" required>
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="4" required>{{ flavor.description }}</textarea>
+        <div>
+            <label for="is_ice_cream">what type of flavor is this?</label>
+            <input type="radio" id="is_ice_cream_true" name="is_ice_cream" value="True" {% if flavor.is_ice_cream %}checked{% endif %} required>
+            <label for="is_ice_cream_true">Ice cream</label>
+            <input type="radio" id="is_ice_cream_false" name="is_ice_cream" value="False" {% if not flavor.is_ice_cream %}checked{% endif %} required>
+            <label for="is_ice_cream_false">Sorbet</label>
+        </div>
+        <button class='btn btn-primary'>Submit</button>
+    </form>
+</body>
+
+</html>
