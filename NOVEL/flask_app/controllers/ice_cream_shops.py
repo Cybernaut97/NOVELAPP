@@ -70,9 +70,13 @@ def delete_ice_cream_shop(ice_cream_shop_id):
 
 @app.route('/assign_user_to_shop/<int:user_id>/<int:shop_id>', methods=['POST'])
 def assign_user_to_shop(user_id, shop_id):
+    users = User.get_all()
+    ice_cream_shops = IceCreamShop.get_all()
     ice_cream_shop = connectToMySQL(DATABASE).query_db("SELECT * FROM ice_cream_shops WHERE id = %(id)s;", {'id': shop_id})
     query = "UPDATE users SET shop_id = %(shop_id)s WHERE id = %(user_id)s;"
     data = {'shop_id': shop_id, 'user_id': user_id}
     connectToMySQL(DATABASE).query_db(query, data)
     flash('User assigned to shop!', 'success')
-    return render_template('assign_user_to_shop.html', ice_cream_shop=ice_cream_shop)
+    print(users)
+    print(ice_cream_shops)
+    return render_template('assign_user_to_shop.html', ice_cream_shop=ice_cream_shop, users=users, ice_cream_shops=ice_cream_shops)
