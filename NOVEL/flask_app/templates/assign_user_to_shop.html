@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg  container my-3  ">
+        <a class="navbar-brand" href="#">Novel's Ice Cream Management System</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/new">Add Flavor</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-12 col-md-3">
+                <h3>Navigation</h3>
+                <div class="list-group mt-4">
+                    <a href="/ice_cream_shops" class="list-group-item list-group-item-action">All Ice Cream Shops</a>
+                    <a href="/flavors" class="list-group-item list-group-item-action">All Flavors</a>
+                    <a href="/ice_cream_shops" class="list-group-item list-group-item-action">All Ice Cream Shops</a>
+                    <a href="#" class="list-group-item list-group-item-action">View Freezer</a>
+                    {% if shop %}
+                    <a href="{{ url_for('ice_cream_shops.freezer', shop_id=shop.id) }}" class="btn btn-primary">View
+                        Freezer</a>
+                    {% endif %}
+                </div>
+            </div>
+            <form method="POST" action="assign_user_to_shop" class="col-12 col-md-9">
+                <div class="form-group">
+                    <label for="user_id">Select user:</label>
+                    <select name="user_id" id="user_id" class="form-control">
+                        {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.first_name }} {{ user.last_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="shop_id">Assign to shop:</label>
+                    <select name="shop_id" id="shop_id" class="form-control">
+                        {% for shop in ice_cream_shops %}
+                        <option value="{{ shop.id }}">{{ shop.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Assign</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>

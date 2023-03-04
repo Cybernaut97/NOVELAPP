@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg  container my-3  ">
+        <a class="navbar-brand" href="#">Novel's Ice Cream Management System</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/new">Add Flavor</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-12 col-md-3">
+                <h3>Navigation</h3>
+                <div class="list-group mt-4">
+                    <a href="/ice_cream_shops" class="list-group-item list-group-item-action">All Ice Cream Shops</a>
+                    <a href="/flavors" class="list-group-item list-group-item-action">All Flavors</a>
+                    <a href="/ice_cream_shops" class="list-group-item list-group-item-action">All Ice Cream Shops</a>
+                    <a href="#" class="list-group-item list-group-item-action">View Freezer</a>
+                    {% if shop %}
+                    <a href="{{ url_for('ice_cream_shops.freezer', shop_id=shop.id) }}" class="btn btn-primary">View Freezer</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12 col-md-9">
+                {% for shop in ice_cream_shops %}
+                <form action="{{ url_for('assign_user_to_shop', user_id=user.id, shop_id=shop.id) }}" method="POST">
+                    <input type="submit" value="Assign to Shop">
+                </form>
+                <div class="card my-3">
+                    <div class="card-header">
+                        <h2>{{ shop.name }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="mb-4">Current Flavors</h4>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Type</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for flavor in shop.current_flavors %}
+                                <tr>
+                                    <td>{{ flavor.name }}</td>
+                                    <td>{{ flavor.description }}</td>
+                                    <td>{{ 'Ice Cream' if flavor.is_ice_cream else 'Sorbet' }}</td>
+                                    <td>
+                                        <a href="/flavors/{{ flavor.id }}"
+                                            class="btn btn-sm btn-outline-primary">View</a>
+                                        <a href="/flavors/{{ flavor.id }}/edit"
+                                            class="btn btn-sm btn-outline-secondary">Edit</a>
+                                        <form action="/flavors/{{ flavor.id }}/delete" method="post" class="d-inline">
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
