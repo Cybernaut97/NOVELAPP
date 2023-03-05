@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add to Freezer Inventory</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+J84jq6ZiQzIx15we/zDwN6U1SzI1M+" crossorigin="anonymous">
+</head>
+
+<body>
+	<div class="container my-3 ">
+		<div class="d-flex justify-content-between mb-3">
+			<a class="btn btn-secondary" href='/dashboard'>Dashboard</a>
+			<a class="btn btn-danger" href="/logout">Logout</a>
+		</div>
+		<h1>Add to Freezer Inventory</h1>
+    <p>Add {{ flavor.name }} to which ice cream shop's freezer inventory?</p>
+    <form method="POST" action="/add_to_freezer/{{ flavor.id }}/{{ ice_cream_shop.id }}">
+        <input type="hidden" name="flavor_id" value="{{ flavor.id }}">
+        <div class="form-group">
+            <label for="{{ ice_cream_shop.id }}">Ice Cream Shop:</label>
+            <select class="form-control" id="{{ ice_cream_shop.id }}" name="ice_cream_shop_id">
+                {% for shop in ice_cream_shops %}
+                <option value="{{ shop.id }}">{{ shop.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="quantity-input">Quantity:</label>
+            <input class="form-control" type="number" id="quantity-input" name="quantity" min="1" value="1">
+        </div>
+        <a href="/add_to_freezer/{{ flavor.id }}/{{ ice_cream_shop.id }}" class="btn btn-success">Add to Freezer</a>
+    </form>
+	</div>
+</body>
+</html>
