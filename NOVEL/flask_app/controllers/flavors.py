@@ -1,4 +1,5 @@
 from flask_app import app
+
 from flask import Flask, render_template, request, redirect, session, flash
 from flask_app.models.user import User
 from flask_app.models.flavor import Flavor
@@ -33,6 +34,7 @@ def ice_cream_flavors():
     sorbet_flavors = Flavor.get_all()
     ice_cream_shop_id = request.args.get('ice_cream_shop_id')
     shop = None  # initialize the shop variable
+    user = User.get_one_by_id(session['id']) # get the current user object
     print("ice_cream_shop_id:", ice_cream_shop_id)
     if ice_cream_shop_id:
         shop = IceCreamShop.get_one_by_id({'id': ice_cream_shop_id})
@@ -43,7 +45,7 @@ def ice_cream_flavors():
     else:
         print("No ice cream shop id provided")
     print("shop:", shop)
-    return render_template('flavors.html', ice_cream_flavors=ice_cream_flavors, sorbet_flavors=sorbet_flavors, shop=shop)
+    return render_template('flavors.html', ice_cream_flavors=ice_cream_flavors, sorbet_flavors=sorbet_flavors, shop=shop, user_id=user.id)
 
 @app.route('/show/<int:flavor_id>')
 def show(flavor_id):
