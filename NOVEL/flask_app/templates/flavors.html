@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light container my-3  ">
+        <a class="navbar-brand" href="#">My Ice Cream Shop</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/new">Add a Flavor</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-2">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control bg-light text light" placeholder="Search flavors..."
+                id="searchInput">
+            <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+        </div>
+
+
+        <h2>Ice Cream Flavors</h2>
+        <div style="height: 300px; overflow: auto;">
+            <table class="table" id="iceCreamTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for flavor in ice_cream_flavors %}
+                    <tr>
+                        <td>{{ flavor.name }}</td>
+                        <td>{{ flavor.description }}</td>
+                        <td>
+                            <a href="/edit/{{ flavor.id }}/edit" class="btn btn-primary">Edit</a>
+                            {% if session['id'] == ice_cream_shop.user_id or not session %}
+                            <a href="{{ url_for('add_to_freezer', ice_cream_shop_id=ice_cream_shop.id, flavor_id=flavor.id) }}" class="btn btn-primary">Add to Freezer</a>
+                            {% endif %}
+                            <form action="/delete/{{ flavor.id }}/delete" method="POST" style="display: inline">
+                                <button type="submit" class="btn btn-danger"
+                                    onclick="return confirm('Are you sure you want to delete this flavor?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Sorbets</h2>
+        <div style="height: 300px; overflow: auto;">
+            <table class="table" id="sorbetTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for flavor in sorbet_flavors %}
+                    <tr>
+                        <td>{{ flavor.name }}</td>
+                        <td>{{ flavor.description }}</td>
+                        <td>
+                            <a href="/edit/{{ flavor.id }}/edit" class="btn btn-primary">Edit</a>
+                            {% if session['id'] == ice_cream_shop.user_id or not session %}
+                            <a href="{{ url_for('add_to_freezer', ice_cream_shop_id=ice_cream_shop.id, flavor_id=flavor.id) }}"
+                                class="btn btn-primary">Add to Freezer</a>
+                            {% endif %}
+                            <form action="/delete/{{ flavor.id }}/delete" method="POST" style="display: inline">
+                                <button type="submit" class="btn btn-danger"
+                                    onclick="return confirm('Are you sure you want to delete this flavor?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+</body>
+<script>
+    $(document).ready(function () {
+        // Filter the Ice Cream Flavors table
+        $("#searchInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#iceCreamTable tbody tr, #sorbetTable tbody tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+
+</html>
