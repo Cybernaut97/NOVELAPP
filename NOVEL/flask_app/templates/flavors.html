@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>All Flavors</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+        integrity="sha384-MVf1GZu8wVJh2GNYshBnN+ei9d9tVnsNlCmyOH+VpAsZnN/7wITi2QBJaoG0plNE"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light container">
+        <a class="navbar-brand" href="#">Novel Ice Cream</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/dashboard" class="btn btn-secondary mr-2">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/ice_cream_shops" class="btn btn-secondary mr-2">All Ice Cream Shops</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/create" class=" btn btn-warning mr-2">Create New Flavor!</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-danger" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container my-2">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control bg-light text light" placeholder="Search flavors..."
+                id="searchInput">
+            <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+        </div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-danger">{{message}}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <h2>Ice Cream Flavors</h2>
+        <div style="height: 300px; overflow: auto;">
+            <table class="table table-bordered table-striped" id="iceCreamTable">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Name</th>
+                        <th style="width: 40%;">Description</th>
+                        <th style="width: 20%;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for flavor in ice_cream_flavors %}
+                    <tr>
+                        <td>{{ flavor.name }}</td>
+                        <td>{{ flavor.description }}</td>
+                        <td>
+                            {% if ice_cream_shop and (session['id'] == ice_cream_shop.user_id or not session) %}
+                            <a href="/edit/{{ flavor.id }}/edit" class="btn btn-primary">Edit</a>
+                            <form action="{{ url_for('delete_flavor', flavor_id=flavor.id, ice_cream_shop_id=ice_cream_shop.id) }}" method="POST" style="display: inline;">
+                                <input type="hidden" name="_method" value="DELETE" />
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirm-delete-flavor-{{ flavor.id }}">Delete</button>
+                                <div class="modal fade" id="confirm-delete-flavor-{{ flavor.id }}" tabindex="-1" aria-labelledby="confirm-delete-flavor-label" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="confirm-delete-flavor-label">Confirm deletion</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete the flavor "{{ flavor.name }}"?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-danger" name="confirm_delete_flavor_{{ flavor.id }}" value="yes">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <a href="{{ url_for('add_to_freezer', ice_cream_shop_id=ice_cream_shop.id, flavor_id=flavor.id) }}"
+                                class="btn btn-success">Add to Freezer</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Sorbet Flavors</h2>
+        <div style="height: 300px; overflow: auto;">
+            <table class="table table-bordered table-striped" id="sorbetTable">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Name</th>
+                        <th style="width: 40%;">Description</th>
+                        <th style="width: 20%;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for flavor in sorbet_flavors %}
+                    <tr>
+                        <td>{{ flavor.name }}</td>
+                        <td>{{ flavor.description }}</td>
+                        <td>
+                            {% if ice_cream_shop and (session['id'] == ice_cream_shop.user_id or not session ) %}
+                            <a href="/edit/{{ flavor.id }}/edit" class="btn btn-primary">Edit</a>
+                            <form action="{{ url_for('delete_flavor', flavor_id=flavor.id, ice_cream_shop_id=ice_cream_shop.id) }}" method="POST" style="display: inline;">
+                                <input type="hidden" name="_method" value="DELETE" />
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirm-delete-flavor-{{ flavor.id }}">Delete</button>
+                                <div class="modal fade" id="confirm-delete-flavor-{{ flavor.id }}" tabindex="-1" aria-labelledby="confirm-delete-flavor-label" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="confirm-delete-flavor-label">Confirm deletion</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete the flavor "{{ flavor.name }}"?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-danger" name="confirm_delete_flavor_{{ flavor.id }}" value="yes">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <a href="{{ url_for('add_to_freezer', ice_cream_shop_id=ice_cream_shop.id, flavor_id=flavor.id) }}"
+                                class="btn btn-success">Add to Freezer</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/WMono8aHDPxA0iZ7L7gD8TrL9zjJJJ5L7//b3J" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Filter the Ice Cream Flavors table
+            document.getElementById("searchInput").addEventListener("keyup", function () {
+                var value = this.value.toLowerCase();
+                filterTable(value);
+            });
+        });
+    
+        function filterTable(value) {
+            var rows = document.querySelectorAll("#iceCreamTable tbody tr, #sorbetTable tbody tr");
+            rows.forEach(function (row) {
+                var rowText = row.textContent.toLowerCase();
+                if (rowText.indexOf(value) > -1) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
