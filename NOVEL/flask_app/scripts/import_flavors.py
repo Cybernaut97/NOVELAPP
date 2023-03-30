@@ -17,7 +17,7 @@ creds = Credentials.from_service_account_file('C:/Users/Francisco/Desktop/NOVEL/
 client = gspread.authorize(creds)
 
 # Open the Google Sheet by URL or name
-sheet = client.open_by_url('https://docs.google.com/spreadsheets/d/1-M6bG--3XKM9k3Q9XX3hSrBT2adEP3FbJ0m9ESb-39I/edit#gid=1710817940')
+# sheet = client.open_by_url('https://docs.google.com/spreadsheets/d/1-M6bG--3XKM9k3Q9XX3hSrBT2adEP3FbJ0m9ESb-39I/edit#gid=1710817940')
 # or
 # sheet = client.open('Your Sheet Name')
 
