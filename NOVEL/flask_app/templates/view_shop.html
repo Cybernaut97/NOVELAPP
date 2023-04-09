@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{{ice_cream_shop.name}} | Ice Cream Shop</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        /* Add custom styles here */
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>{{ice_cream_shop.name}} - Inventory</h1>
+        <h2>Current Flavors</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for flavor in flavors %}
+                <tr>
+                    <td>{{flavor.name}}</td>
+                    <td>{{flavor.description}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h2>Freezer Inventory</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Flavor</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inventory in freezer_inventory %}
+                <tr>
+                    <td>{{inventory.flavor_id}}</td>
+                    <td>{{inventory.quantity}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

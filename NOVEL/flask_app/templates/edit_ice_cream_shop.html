@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dashboard</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+        integrity="sha384-MVf1GZu8wVJh2GNYshBnN+ei9d9tVnsNlCmyOH+VpAsZnN/7wITi2QBJaoG0plNE"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+
+    <style>
+        .navbar-logo {
+            height: 50px;
+            /* Adjust the height according to your preference */
+            width: auto;
+            /* Maintain the aspect ratio */
+            margin-right: 10px;
+            /* Add some space between the logo and other elements */
+        }
+
+        .nav-link-spacing {
+            margin-right: 10px;
+            /* Adjust the value to your preference */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light container my-3">
+            <!-- <a class="navbar-brand" href="#">Novel Ice Cream</a> -->
+            <img src="\static\images\Novel_logo.png" class="Novel navbar-logo" alt="Novel">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <a href="/dashboard" class="btn btn-info nav-link-spacing">Dashboard</a>
+                    <li class="nav-item">
+                        <a class="btn btn-danger" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <h1 class="my-4">Edit Ice Cream Shop</h1>
+        <form class="my-4" action="/ice_cream_shops/update/{{ice_cream_shop.id}}" method="POST">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input class="form-control" type="text" id="name" name="name" value="{{ ice_cream_shop.name }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input class="form-control" type="text" id="address" name="address" value="{{ ice_cream_shop.address }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone_number">Phone Number:</label>
+                <input class="form-control" type="text" id="phone_number" name="phone_number" value="{{ ice_cream_shop.phone_number }}" required>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Update</button>
+        </form>
+
+
+
+        
+        <h2 class="my-4">Assign User to Shop</h2>
+<form action="/ice_cream_shops/{{ice_cream_shop.id}}/assign_user" method="post">
+    <input type="hidden" name="shop_id" value="{{ ice_cream_shop.id }}">
+    <div class="mb-3">
+        <label for="first_name" class="form-label">First Name:</label>
+        <input type="text" class="form-control" name="first_name" id="first_name">
+    </div>
+    <div class="mb-3">
+        <label for="last_name" class="form-label">Last Name:</label>
+        <input type="text" class="form-control" name="last_name" id="last_name">
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">User Email:</label>
+        <input type="text" class="form-control" name="email" id="email">
+    </div>
+    <div class="mb-3">
+        <label for="user_password" class="form-label">User Password:</label>
+        <input type="password" class="form-control" name="user_password" id="user_password">
+    </div>
+    <button type="submit" class="btn btn-primary">Assign</button>
+</form>
+<h2 class="my-4">Assigned Users</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in assigned_users %}
+            <tr>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.last_name }}</td>
+                <td>{{ user.email }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+    </body>
+</html>
