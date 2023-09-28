@@ -1,0 +1,22 @@
+steps:
+- name: 'gcr.io/cloud-builders/git'
+  args: ['clone', '--depth', '1', 'https://github.com/Cybernaut97/NOVELAPP.git']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/NOVEL/flask-app', './NOVEL/']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/NOVEL/flask-app']
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - 'run'
+  - 'deploy'
+  - 'flask-app'
+  - '--image=gcr.io/NOVEL/flask-app'
+  - '--platform=managed'
+  - '--region=us-central1'
+  - '--allow-unauthenticated'
+
+images:
+- 'gcr.io/NOVEL/flask-app'
